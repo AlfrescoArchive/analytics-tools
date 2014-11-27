@@ -5,5 +5,4 @@
  * 
  * Analytics tools
  */
-model.tools = Admin.getConsoleTools("admin-analytics-tools");
-model.metadata = Admin.getServerMetaData();
+model.tools = Admin.getConsoleTools("admin-analytics-demo");
