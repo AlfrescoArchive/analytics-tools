@@ -4,5 +4,6 @@
    xmlns:context="http://www.springframework.org/schema/context">
    
    <context:component-scan base-package="org.alfresco.analytics.event" />
+   <bean id="mockhelper" class="org.alfresco.events.enrichers.MockEnricherHelper"></bean>
    
 </beans>

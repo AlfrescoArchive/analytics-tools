@@ -65,9 +65,33 @@
          for more info, please refer to alfresco-platform-distribution POM -->
     <dependencies>
         <dependency>
-            <groupId>${alfresco.groupId}</groupId>
-            <artifactId>alfresco-repository</artifactId>
+          <groupId>${alfresco.groupId}</groupId>
+          <artifactId>alfresco-repository</artifactId>
         </dependency>
+        <dependency>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-math3</artifactId>
+          <version>3.3</version>
+        </dependency>
+        <dependency>
+          <groupId>org.alfresco.services</groupId>
+          <artifactId>alfresco-events</artifactId>
+          <version>1.2.4</version>
+          <scope>provided</scope>
+        </dependency>
+         <dependency>
+          <groupId>org.alfresco.services</groupId>
+          <artifactId>alfresco-events-repo-publishing</artifactId>
+          <version>1.2.4</version>
+          <scope>provided</scope>
+        </dependency>
+         <dependency>
+          <groupId>org.alfresco.services</groupId>
+          <artifactId>alfresco-events-repo-publishing</artifactId>
+          <version>1.2.4</version>
+          <classifier>tests</classifier>
+          <scope>test</scope>
+        </dependency>                   
     </dependencies>
   
 </project>

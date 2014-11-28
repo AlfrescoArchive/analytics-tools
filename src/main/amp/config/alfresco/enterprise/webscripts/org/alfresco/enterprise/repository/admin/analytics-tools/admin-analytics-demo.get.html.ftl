@@ -18,6 +18,6 @@
       <@section label=msg("tool.analytics.generate") />
    </div>   
    <div class="column-left">
-      <@button id="upload-license" label=msg("tool.analytics.generate") description=msg("tool.analytics.generate") onclick="Admin.showDialog('${url.serviceContext}/enterprise/admin/admin-analytics-generateevents');" />
+      <@button id="upload-license" label=msg("tool.analytics.generate") description=msg("tool.analytics.generate") onclick="Admin.showDialog('${url.serviceContext}/enterprise/admin/admin-analytics-bulkevent?startDate=2014-09-01&count=200');" />
    </div>
 </@page>

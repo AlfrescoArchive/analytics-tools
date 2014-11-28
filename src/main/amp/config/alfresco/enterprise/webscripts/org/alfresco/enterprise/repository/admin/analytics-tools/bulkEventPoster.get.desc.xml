@@ -1,0 +1,9 @@
+<webscript>
+  <shortname>Bulk event poster</shortname>
+  <description><![CDATA[Admin Console WebScript that creates Analytics demo data.]]></description>
+  <url>/enterprise/admin/admin-analytics-bulkevent</url>
+  <format default="json">argument</format>
+   <authentication>admin</authentication>
+   <lifecycle>internal</lifecycle>
+   <transaction allow="readonly">required</transaction>
+</webscript>
