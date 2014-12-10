@@ -64,7 +64,6 @@ public class EventPublisherForTestingOnly implements EventPublisher
  
     private void log (String logMessage)
     {
-        System.out.println(logMessage);
         if (logger.isDebugEnabled())
         {
             logger.debug(logMessage);

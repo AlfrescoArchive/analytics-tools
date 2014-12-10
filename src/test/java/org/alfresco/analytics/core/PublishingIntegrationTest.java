@@ -1,16 +1,19 @@
 package org.alfresco.analytics.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
+import org.alfresco.analytics.activiti.DemoActivitiProcess;
 import org.alfresco.analytics.event.EventFactory;
 import org.alfresco.analytics.event.EventHelper;
 import org.alfresco.analytics.event.EventPublisherForTestingOnly;
 import org.alfresco.repo.Client;
 import org.alfresco.repo.Client.ClientType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,10 +22,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:alfresco/extension/analytics-test-context.xml")
+@ContextConfiguration("classpath:unittests/analytics-test-context.xml")
 public class PublishingIntegrationTest
 {
-
+    private static Log logger = LogFactory.getLog(PublishingIntegrationTest.class);
+    
     @Autowired
     EventFactory factory;
     
@@ -45,6 +49,25 @@ public class PublishingIntegrationTest
         assertEquals(numberOfValues, testingPub.getQueue().size());
         testingPub.getQueue().clear();  //clean up
         
+    }
+    
+    @Test
+    public void testActivitiDemoProcessesCreation()
+    {
+       List<String> users = Arrays.asList("ken","barbie","bob","fred");
+       List<String> definitions = Arrays.asList("activitiAdhoc","activitiReview", "activitiReviewPooled");
+       LocalDate startDate = LocalDate.parse("2014-10-01");
+       LocalDate endDate= LocalDate.parse("2014-10-14");
+       int numberOfProcesses = 500;       
+       List<DemoActivitiProcess> process = factory.createActivitiDemoProcesses(definitions, users, startDate, endDate, numberOfProcesses);
+       for (DemoActivitiProcess demoActivitiProcess : process)
+       {
+           logger.debug(demoActivitiProcess);
+           assertTrue(demoActivitiProcess.getStartTime().isAfter(startDate.toDateTimeAtStartOfDay().minus(1)));
+           assertTrue(demoActivitiProcess.getEndTime().isBefore(endDate.plusDays(1).toDateTimeAtStartOfDay().plus(1)));
+           assertTrue(demoActivitiProcess.getDueTime().isAfter(demoActivitiProcess.getStartTime()));
+           assertTrue(demoActivitiProcess.getDueTime().isBefore(demoActivitiProcess.getEndTime())||demoActivitiProcess.getDueTime().isEqual(demoActivitiProcess.getEndTime()));
+       }
     }
 
 }

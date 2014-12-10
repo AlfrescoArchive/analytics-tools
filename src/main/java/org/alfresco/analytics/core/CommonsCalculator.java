@@ -21,6 +21,7 @@ public class CommonsCalculator implements Calculator
 
     RandomDataGenerator randomHour = new RandomDataGenerator();
     RandomDataGenerator randomMinute = new RandomDataGenerator();
+    RandomDataGenerator randomInterval = new RandomDataGenerator();
     
     @Override
     public long[] distributeDates(LocalDate startDate, LocalDate endDate, int numberOfValues)
@@ -53,6 +54,16 @@ public class CommonsCalculator implements Calculator
             toReturn.add(values.get(sample[i]));
         }
         return toReturn;
+    }
+
+    @Override
+    public DateTime randomTime(DateTime startTime, DateTime endTime)
+    {
+        Duration duration = new Duration(startTime,endTime);
+        int minutes = duration.toStandardMinutes().getMinutes();
+        if (minutes < 15) minutes += 15;
+        return startTime.plusMinutes(randomInterval.nextInt(1, minutes));
+
     }
 
 }

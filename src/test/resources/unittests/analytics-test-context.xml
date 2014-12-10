@@ -5,5 +5,11 @@
    
    <context:component-scan base-package="org.alfresco.analytics.event" />
    <bean id="mockhelper" class="org.alfresco.events.enrichers.MockEnricherHelper"></bean>
-   
+    
+    <!-- Override listener for process events -->
+ <!--    <bean id="processActivitiEventListener" class="org.alfresco.analytics.activiti.DemoDataProcessActivitiEventListener">
+        <property name="messageProducer" ref="activitiProducer" />
+        <property name="manager" ref="activitibulkManager" />        
+        <property name="eventTypes" value="ENTITY_INITIALIZED,ENTITY_DELETED" />
+    </bean>     -->
 </beans>

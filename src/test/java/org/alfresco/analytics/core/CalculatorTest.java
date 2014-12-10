@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
@@ -43,6 +44,25 @@ public class CalculatorTest
         {
             System.out.println("D: "+new Date(distribution[i]));
         }
+    }
+    @Test
+    public void testRandomTime()
+    {
+        DateTime start = DateTime.parse("2014-09-01");
+        DateTime end = DateTime.parse("2014-10-02T23:59:59.999Z");
+        for (int i = 0; i < 20; i++)
+        {
+            randomTimesAssertion(start, end);            
+        }
+
+    }
+
+    private void randomTimesAssertion(DateTime start, DateTime end)
+    {
+        DateTime rand = calc.randomTime(start,end);
+        System.out.println(rand);
+        assertTrue(rand.isAfter(start));
+        assertTrue(rand.isBefore(end));
     }
     
     @Test

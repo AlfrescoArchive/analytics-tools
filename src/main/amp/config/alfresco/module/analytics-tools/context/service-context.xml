@@ -4,5 +4,30 @@
    xmlns:context="http://www.springframework.org/schema/context">
    
    <context:component-scan base-package="org.alfresco.analytics.event" />
+ 
+    
+   <bean id="activitiReviewProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.ReviewProcessExecutor">
+      <property name="processDefinitionKey" value="activiti$activitiReview" />
+      <property name="runtimeService" ref="activitiRuntimeService"/>
+      <property name="workflowService" ref="WorkflowService"/>
+      <property name="personService" ref="personService"/>
+   </bean>
    
+   <bean id="activitiAdhoqProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.ReviewProcessExecutor">
+      <property name="processDefinitionKey" value="activiti$activitiAdhoc" />
+      <property name="runtimeService" ref="activitiRuntimeService"/>
+      <property name="workflowService" ref="WorkflowService"/>
+      <property name="personService" ref="personService"/>
+   </bean>   
+   
+   <bean  id="demoProcessEnricher" class="org.alfresco.analytics.activiti.demo.DemoProcessEnricher">
+      <property name="manager" ref="activitibulkManager"/>
+   </bean>
+   
+   <bean id="activitibulkManager" class="org.alfresco.analytics.activiti.BulkActivitiManager">
+        <property name="factory" ref="bulkEventFactory" />
+   </bean>
+
+    
+    
 </beans>

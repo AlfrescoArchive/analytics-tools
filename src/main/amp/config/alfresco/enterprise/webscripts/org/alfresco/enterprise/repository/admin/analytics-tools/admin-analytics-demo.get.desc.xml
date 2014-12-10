@@ -1,5 +1,5 @@
 <webscript>
-   <shortname>Analytics Demo Data</shortname>
+   <shortname>Analytics Demo Events</shortname>
    <description><![CDATA[Admin Console WebScript that creates Analytics demo data.]]></description>
    <url>/enterprise/admin/admin-analytics-demo</url>
    <family>AdminConsole</family>

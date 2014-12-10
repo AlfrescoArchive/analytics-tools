@@ -1,21 +1,22 @@
 
 package org.alfresco.analytics.webscripts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.alfresco.analytics.event.EventFactory;
-import org.alfresco.analytics.event.EventHelper;
 import org.alfresco.repo.Client;
 import org.alfresco.repo.Client.ClientType;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileInfo;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.LocalDate;
 import org.springframework.extensions.webscripts.Cache;
-import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 
@@ -24,31 +25,27 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
  *
  * @author Gethin James
  */
-public class BulkEventPoster extends DeclarativeWebScript
+public class BulkEventPoster extends AbstractBulkPoster
 {
 
-    private EventFactory factory;
-
     private static Log logger = LogFactory.getLog(BulkEventPoster.class);
-
+    private FileFolderService fileService;
+    
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache)
     {
         Map<String, Object> model = new HashMap<String, Object>(2, 1.0f);
+        
         Pair<LocalDate, LocalDate> startAndEnd = getStartAndEndDates(req.getParameter("startDate"),
                     req.getParameter("endDate"));
-        int numberOfValues = getNumberOfValues(req.getParameter("count"));
+        int numberOfValues = getNumberOfValues(req.getParameter("numberOfValues"));
+        List<String> nodes = getNodes(req.getParameter("content"));
+        String[] activities = req.getParameterValues("events");
+        String[] users = req.getParameterValues("people");
+        String[] sites = req.getParameterValues("sites");
+        List<Client> clients = getClientTypes(req.getParameterValues("clients"));
 
-        List<String> activities = EventHelper.getFileActivities();
-        List<String> users = Arrays.asList("ken", "barbie", "bob", "fred");
-        List<String> sites = Arrays.asList("clothes", "food", "gadgets");
-        List<String> nodes = Arrays.asList("c66a1277-35f9-47fb-90a9-411c3bfc896a",
-                    "65bd55c9-9da1-425a-b62b-506ec8f23448", "dbd0bc92-0801-4b5c-8cf8-c4c549d8f1e9",
-                    "c66a1277-35f9-47fb-90a9-411c3bfc896a");
-        List<Client> clients = Arrays.asList(Client.asType(ClientType.webclient),
-                    Client.asType(ClientType.cmis));
-
-        factory.createBulkNodeActivityEvents(activities, users, sites, nodes, clients, startAndEnd
+        factory.createBulkNodeActivityEvents(Arrays.asList(activities), Arrays.asList(users), Arrays.asList(sites), nodes, clients, startAndEnd
                     .getFirst().plusDays(1), startAndEnd.getSecond(), numberOfValues);
         model.put("resultSize", numberOfValues);
         model.put("from", startAndEnd.getFirst().toString());
@@ -56,38 +53,32 @@ public class BulkEventPoster extends DeclarativeWebScript
         return model;
     }
 
-    private int getNumberOfValues(String number)
+    private List<Client> getClientTypes(String[] clientTypes)
     {
-        int numberOfValues = 100; // default
-        if (number != null) { return Integer.parseInt(number); }
-        return numberOfValues;
-    }
-
-    /**
-     * Parses ISO8601 formatted Date Strings.
-     * 
-     * @param start If start is null then defaults to 1 month
-     * @param end If end is null then it defaults to now();
-     * @return Pair <Start,End>
-     */
-    public static Pair<LocalDate, LocalDate> getStartAndEndDates(String start, String end)
-    {
-        LocalDate startDate;
-        if (start == null)
+        List<Client> clients = new ArrayList<Client>(clientTypes.length);
+        for (int i = 0; i < clientTypes.length; i++)
         {
-            startDate = LocalDate.now().minusMonths(6);
+            clients.add(Client.asType(ClientType.valueOf(clientTypes[i])));
         }
-        else
-        {
-            startDate = LocalDate.parse(start);
-        }
-        LocalDate endDate = end != null ? LocalDate.parse(end) : LocalDate.now();
-        return new Pair<LocalDate, LocalDate>(startDate, endDate);
+        return clients;
     }
 
-    public void setFactory(EventFactory factory)
+    protected List<String> getNodes(String noderef)
     {
-        this.factory = factory;
+        List<String> nodes = new ArrayList<String>();
+        NodeRef nodeRef = new NodeRef(noderef);
+        List<FileInfo> files = fileService.listFiles(nodeRef);
+        for (FileInfo fileInfo : files)
+        {
+            nodes.add(fileInfo.getNodeRef().getId());
+        }
+        return nodes;
+    }
+    
+    public void setFileService(FileFolderService fileService)
+    {
+        this.fileService = fileService;
     }
 
-}
+
+ }

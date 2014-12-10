@@ -1,0 +1,9 @@
+<webscript>
+  <shortname>Bulk activiti event poster</shortname>
+  <description><![CDATA[Admin Console WebScript that creates Analytics demo data for Activiti workflows.]]></description>
+  <url>/enterprise/admin/admin-analytics-bulkactiviti</url>
+  <format default="json">argument</format>
+  <authentication>admin</authentication>
+  <lifecycle>internal</lifecycle>
+  <transaction>required</transaction>
+</webscript>
