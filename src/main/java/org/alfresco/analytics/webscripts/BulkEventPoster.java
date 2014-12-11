@@ -45,6 +45,8 @@ public class BulkEventPoster extends AbstractBulkPoster
         String[] sites = req.getParameterValues("sites");
         List<Client> clients = getClientTypes(req.getParameterValues("clients"));
 
+        updateSites(sites,startAndEnd.getSecond());
+        updateUsers(users,startAndEnd.getSecond());
         factory.createBulkNodeActivityEvents(Arrays.asList(activities), Arrays.asList(users), Arrays.asList(sites), nodes, clients, startAndEnd
                     .getFirst().plusDays(1), startAndEnd.getSecond(), numberOfValues);
         model.put("resultSize", numberOfValues);

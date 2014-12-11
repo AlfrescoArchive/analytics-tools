@@ -10,8 +10,14 @@ import org.alfresco.analytics.activiti.DemoActivitiProcess;
 import org.alfresco.analytics.event.EventFactory;
 import org.alfresco.analytics.event.EventHelper;
 import org.alfresco.analytics.event.EventPublisherForTestingOnly;
+import org.alfresco.events.types.SiteManagementEvent;
+import org.alfresco.events.types.UserManagementEvent;
 import org.alfresco.repo.Client;
 import org.alfresco.repo.Client.ClientType;
+import org.alfresco.repo.site.TestSiteInfoImpl;
+import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.site.SiteInfo;
+import org.alfresco.service.cmr.site.SiteVisibility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.LocalDate;
@@ -34,7 +40,7 @@ public class PublishingIntegrationTest
     EventPublisherForTestingOnly testingPub;
 
     @Test
-    public void testPublishEvents()
+    public void testPublishActivitiesEvents()
     {
         List<String> activities = EventHelper.getFileActivities();
         List<String> users = Arrays.asList("ken","barbie","bob","fred");
@@ -50,6 +56,37 @@ public class PublishingIntegrationTest
         testingPub.getQueue().clear();  //clean up
         
     }
+    
+    @Test
+    public void testPublishUserUpdateEvents()
+    {
+        LocalDate endDate= LocalDate.parse("2014-10-07");
+        PersonService.PersonInfo info = new PersonService.PersonInfo(null, "kdoll", "Ken", "Doll");
+        factory.updateUser(info, endDate);
+        assertEquals(1, testingPub.getQueue().size());
+        UserManagementEvent event = (UserManagementEvent) testingPub.getQueue().element();
+        assertTrue(event.getManagedForename().equals(info.getFirstName()));
+        assertTrue(event.getManagedUsername().equals(info.getUserName()));
+        assertTrue(event.getManagedSurname().equals(info.getLastName()));
+        assertTrue(event.getTimestamp().equals(endDate.toDate().getTime()));
+        testingPub.getQueue().clear();  //clean up    
+    }
+    
+    @Test
+    public void testPublishSiteUpdateEvents()
+    {
+        LocalDate endDate= LocalDate.parse("2014-10-07");
+        SiteInfo info = new TestSiteInfoImpl("site-dashboard", "sausage", "Sausages", "About sausages", SiteVisibility.PUBLIC);
+        factory.updateSite(info, endDate);
+        assertEquals(1, testingPub.getQueue().size());
+        SiteManagementEvent event = (SiteManagementEvent) testingPub.getQueue().element();
+        assertTrue(event.getSiteId().equals(info.getShortName()));
+        assertTrue(event.getSitePreset().equals(info.getSitePreset()));
+        assertTrue(event.getTitle().equals(info.getTitle()));
+        assertTrue(event.getVisibility().equals(info.getVisibility().toString()));
+
+        testingPub.getQueue().clear();  //clean up    
+    }    
     
     @Test
     public void testActivitiDemoProcessesCreation()

@@ -17,12 +17,16 @@
    <bean id="webscript.org.alfresco.enterprise.repository.admin.analytics-tools.bulkEventPoster.get"
       class="org.alfresco.analytics.webscripts.BulkEventPoster" parent="webscript">
       <property name="factory" ref="bulkEventFactory"/>
-      <property name="fileService" ref="fileFolderService"/>  
+      <property name="fileService" ref="fileFolderService"/>
+      <property name="siteService" ref="siteService"/>
+      <property name="personService" ref="personService"/> 
    </bean>
    <bean id="webscript.org.alfresco.enterprise.repository.admin.analytics-tools.bulkActivitiPoster.get"
       class="org.alfresco.analytics.webscripts.BulkActivitiPoster" parent="webscript">
       <property name="factory" ref="bulkEventFactory"/>
-      <property name="activitiManager" ref="activitibulkManager"/>      
+      <property name="activitiManager" ref="activitibulkManager"/>
+      <property name="siteService" ref="siteService"/>
+      <property name="personService" ref="personService"/>            
    </bean>
    
    <bean id="analytics_repo_bootstrapGroups" class="org.alfresco.repo.module.ImporterModuleComponent" parent="module.baseComponent">

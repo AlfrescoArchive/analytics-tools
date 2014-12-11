@@ -9,6 +9,8 @@ import org.alfresco.analytics.core.Calculator;
 import org.alfresco.analytics.core.CommonsCalculator;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.Client;
+import org.alfresco.service.cmr.security.PersonService.PersonInfo;
+import org.alfresco.service.cmr.site.SiteInfo;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,7 @@ public class EventFactory
     {
         long[] times = calc.distributeDates(startDate, endDate, numberOfValues);
         createBulkNodeActivityEvents(activities,users,sites, nodes, clients, times);
+
     }
     
     public List<DemoActivitiProcess> createActivitiDemoProcesses(List<String> definitions, List<String> users, LocalDate startDate, LocalDate endDate, int numberOfProcesses)
@@ -80,5 +83,15 @@ public class EventFactory
             processes.add(new DemoActivitiProcess(null, definitions.get(i), processStart, processEnd, processDue, users.get(i)));
         }
         return processes;
+    }
+
+    public void updateSite(SiteInfo info, LocalDate when)
+    {
+        helper.publishSiteUpdate(info.getShortName(), info.getTitle(), info.getDescription(), info.getVisibility().toString(), info.getSitePreset(), when.toDate());
+    }
+
+    public void updateUser(PersonInfo info, LocalDate when)
+    {
+        helper.publishUserUpdate(info.getUserName(), info.getFirstName(), info.getLastName(), when.toDate());
     }
 }

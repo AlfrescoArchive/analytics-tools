@@ -3,7 +3,6 @@ package org.alfresco.analytics.core;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -24,12 +23,14 @@ public class CalculatorTest
     public void testDistributeSameDay()
     {
         long[] distribution = calc.distributeDates(LocalDate.parse("2014-09-01"), LocalDate.parse("2014-09-01"), 5);
+        assertNotNull(distribution);
     }
     
     @Test(expected=NumberFormatException.class)
     public void testDistributeLessThan()
     {
         long[] distribution = calc.distributeDates(LocalDate.parse("2014-09-01"), LocalDate.parse("2014-08-01"), 5);
+        assertNotNull(distribution);        
     }    
     
     @Test
@@ -40,10 +41,6 @@ public class CalculatorTest
         
         distribution = calc.distributeDates(LocalDate.parse("2014-09-01"), LocalDate.parse("2014-09-02"), 5);
         assertEquals(5, distribution.length);
-        for (int i = 0; i < distribution.length; i++)
-        {
-            System.out.println("D: "+new Date(distribution[i]));
-        }
     }
     @Test
     public void testRandomTime()
@@ -60,7 +57,7 @@ public class CalculatorTest
     private void randomTimesAssertion(DateTime start, DateTime end)
     {
         DateTime rand = calc.randomTime(start,end);
-        System.out.println(rand);
+        //System.out.println(rand);
         assertTrue(rand.isAfter(start));
         assertTrue(rand.isBefore(end));
     }
@@ -75,7 +72,11 @@ public class CalculatorTest
         {
             assertTrue(source.contains(dist));
         }
-        System.out.println(distribution);
+        //System.out.println(distribution);
+        
+        source = Arrays.asList("Red");
+        distribution = calc.distributeValues(source, 10);
+        assertEquals(10, distribution.size());
     }
 
 }

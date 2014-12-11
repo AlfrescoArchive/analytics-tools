@@ -1,11 +1,14 @@
 package org.alfresco.analytics.event;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.alfresco.events.enrichers.EnricherHelper;
 import org.alfresco.events.types.ActivityEvent;
 import org.alfresco.events.types.Event;
+import org.alfresco.events.types.SiteManagementEvent;
+import org.alfresco.events.types.UserManagementEvent;
 import org.alfresco.repo.Client;
 import org.alfresco.repo.events.EventPreparator;
 import org.alfresco.repo.events.EventPublisher;
@@ -116,5 +119,46 @@ public class EventHelper
                     "org.alfresco.documentlibrary.file-previewed",
                     "org.alfresco.documentlibrary.file-downloaded",
                     "org.alfresco.documentlibrary.file-liked");
+    }
+
+    /**
+     * Publish a Site Update event
+     * @param shortName
+     * @param title
+     * @param description
+     * @param visibility
+     * @param sitePreset
+     * @param date - when
+     */
+    public void publishSiteUpdate(final String shortName, final String title, final String description,
+                final String visibility, final String sitePreset, final Date date)
+    {
+        eventPublisher.publishEvent(new EventPreparator(){
+            @Override
+            public Event prepareEvent(String user, String networkId, String transactionId)
+            {         
+                return new SiteManagementEvent("site.update", transactionId, networkId, date.getTime(),
+                            user, shortName,title,description, visibility,sitePreset);
+            }
+        });        
+    }
+
+    /**
+     * Publish a User update event
+     * @param userName
+     * @param firstName
+     * @param lastName
+     * @param date
+     */
+    public void publishUserUpdate(final String userName, final String firstName, final String lastName, final Date date)
+    {
+        eventPublisher.publishEvent(new EventPreparator(){
+            @Override
+            public Event prepareEvent(String user, String networkId, String transactionId)
+            {         
+                return new UserManagementEvent("user.update" , transactionId, networkId, date.getTime(), 
+                        user, userName,firstName,lastName);
+            }
+        });        
     }
 }
