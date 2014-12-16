@@ -11,11 +11,25 @@
       <div class="control options">
          <span class="label">${msg("Process Types")?html}:</span>
          <span class="value">
-            <select id="processes" name="processes" tabindex="0" multiple size="5">
+            <select id="processes" name="processes" tabindex="0" multiple size="4">
+              <#list processList as p>
+                  <option value="${p?html}" selected="true">${msg(p+".workflow.title")}</option>
+               </#list>
             </select>
          </span>
          <span class="description">The processes to use.</span>         
-      </div>         
+      </div>  
+      <div class="control options">
+         <span class="label">${msg("Priorities")?html}:</span>
+         <span class="value">
+            <select id="priorities" name="priorities" tabindex="0" multiple size="4">
+              <#list priorities as p>
+                  <option value="${p?html}" selected="true">${msg("listconstraint.bpm_allowedPriority."+p)}</option>
+               </#list>
+            </select>
+         </span>
+         <span class="description">The workflow priorities to use.</span>         
+      </div>
    </div>
    <div class="column-right">
       <div class="control options">
@@ -35,7 +49,7 @@
       <div class="control field">
          <span class="label">Content source</span>
          <input id="content" tabindex="0" value="workspace://SpacesStore/880a0f47-31b1-4101-b20b-4d325e54e8b1" name="content" style='width:50em'>
-         <span class="description">Files to use as demo data. Processes act on content (NOT CURRENTLY WORKING).</span>
+         <span class="description">This should be a nodeRef of a folder with files in, to use as demo data. Processes act on content.</span>
       </div>
    </div>   
    <div class="column-left">
@@ -76,29 +90,24 @@
    <script type="text/javascript">//<![CDATA[
       $.noConflict();
       
-      var definitions = ["activitiAdhoc",
-                         "activitiReview",
-                         "activitiReviewPooled"];
-      
       jQuery( document ).ready(function( $ ) {
         
         $("#startDate").datepicker({
-           dateFormat: "yy-mm-dd"
+           dateFormat: "yy-mm-dd",
+           showButtonPanel: true,
+           numberOfMonths: 2
         });
         $("#endDate").datepicker({
-           dateFormat: "yy-mm-dd"
+           dateFormat: "yy-mm-dd",
+           showButtonPanel: true,
+           numberOfMonths: 2
         });
         $("#startDate").datepicker( "setDate", "-6m" );
         $("#endDate").datepicker( "setDate", "-1d" );
-        
-        for (i = 0; i < definitions.length; i++) {
-          $("#processes").append(new Option(definitions[i], definitions[i]));
-        }
-        $("#processes option").attr('selected','selected');
-                
+                      
         $( "#upload-events" ).click(function( event ) {
-           $("#confirmMessage").text("Would you like to create "+$("#numberOfValues").val()+ " processes for "+$("#processes option:selected").size()+ " process types and "+$("#people option:selected").size()
-                                      + " people. The events will be distributed uniformly from "+$("#startDate").val()+ " to "+$("#endDate").val()+" . ");
+           $("#confirmMessage").text("Would you like to create "+$("#numberOfValues").val()+ " processes for "+$("#processes option:selected").size()+ " process types, "+$("#priorities option:selected").size()+ " priorities and "+$("#people option:selected").size()
+                                      + " people. The events will be distributed uniformly from "+$("#startDate").val()+ " to "+$("#endDate").val()+". ");
            $("#dialog-confirm").dialog({
                resizable: false,
                height:250,

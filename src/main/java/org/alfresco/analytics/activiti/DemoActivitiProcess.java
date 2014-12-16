@@ -20,10 +20,11 @@ public class DemoActivitiProcess
     private DateTime startTime;    
     private DateTime endTime;
     private String user;
+    private int priority;
     private List<NodeRef> contentNode = new ArrayList<NodeRef>();
 
     public DemoActivitiProcess(String processId, String definitionKey, DateTime startTime,
-                DateTime endTime, DateTime dueTime,  String user, NodeRef content)
+                DateTime endTime, DateTime dueTime,  String user, int priority, NodeRef content)
     {
         super();
         this.processId = processId;
@@ -32,6 +33,7 @@ public class DemoActivitiProcess
         this.endTime = endTime;
         this.dueTime = dueTime;
         this.user = user;
+        this.priority = priority;
         if (content!=null)
         {
             contentNode.add(content);            
@@ -73,9 +75,14 @@ public class DemoActivitiProcess
         this.processId = processId;
     }
 
-    public NodeRef getContentNode()
+    public List<NodeRef> getContentNodes()
     {
-        return this.contentNode.get(0);
+        return this.contentNode;
+    }
+
+    public int getPriority()
+    {
+        return this.priority;
     }
     
     @Override
@@ -86,8 +93,10 @@ public class DemoActivitiProcess
                     .append(", definitionKey=").append(this.definitionKey).append(", dueTime=")
                     .append(this.dueTime).append(", startTime=").append(this.startTime)
                     .append(", endTime=").append(this.endTime).append(", user=").append(this.user)
-                    .append(", contentNode=").append(this.contentNode).append("]");
+                    .append(", priority=").append(this.priority).append(", contentNode=")
+                    .append(this.contentNode).append("]");
         return builder.toString();
     }
+
 
 }

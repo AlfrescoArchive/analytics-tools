@@ -57,13 +57,14 @@ public class BulkActivitiManager implements InitializingBean, ApplicationContext
     
     /**
      * Starts the number of processes
+     * @param priorities 
      * @param numberOfProcesses
      * @return the actual processes created
      */
-    public int startProcesses(List<String> definitions, List<String> users, List<NodeRef> nodes, LocalDate startDate, LocalDate endDate, int numberOfProcesses)
+    public int startProcesses(List<String> definitions, List<String> users, List<NodeRef> nodes, List<Integer> priorities, LocalDate startDate, LocalDate endDate, int numberOfProcesses)
     {
         
-        List<DemoActivitiProcess> processes = factory.createActivitiDemoProcesses(definitions, users, nodes, startDate, endDate, numberOfProcesses);
+        List<DemoActivitiProcess> processes = factory.createActivitiDemoProcesses(definitions, users, nodes, priorities, startDate, endDate, numberOfProcesses);
         int processedCount = 0;
         
         inFlightProcesses = new HashMap<String, DemoActivitiProcess>();

@@ -38,7 +38,7 @@
       <div class="control field">
          <span class="label">Content source</span>
          <input id="content" tabindex="0" value="workspace://SpacesStore/880a0f47-31b1-4101-b20b-4d325e54e8b1" name="content" style='width:50em'>
-         <span class="description">Files to use as demo data. It uses FileFolderServices.listFiles() to find files that are children of the noderef. 
+         <span class="description">This should be a nodeRef of a folder with files in, to use as demo data. It uses FileFolderServices.listFiles() to find files that are children of the noderef. 
          The files don't have to actually be in the same Site as the Sites selected (above).</span>
       </div>
    </div>   
@@ -119,10 +119,14 @@
       jQuery( document ).ready(function( $ ) {
       
         $("#startDate").datepicker({
-           dateFormat: "yy-mm-dd"
+           dateFormat: "yy-mm-dd",
+           showButtonPanel: true,
+           numberOfMonths: 2
         });
         $("#endDate").datepicker({
-           dateFormat: "yy-mm-dd"
+           dateFormat: "yy-mm-dd",
+           showButtonPanel: true,
+           numberOfMonths: 2
         });
         $("#startDate").datepicker( "setDate", "-6m" );
         $("#endDate").datepicker( "setDate", "-1d" );

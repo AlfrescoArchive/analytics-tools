@@ -4,28 +4,26 @@
    xmlns:context="http://www.springframework.org/schema/context">
    
    <context:component-scan base-package="org.alfresco.analytics.event" />
- 
-    
-   <bean id="activitiReviewProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.ReviewProcessExecutor">
-      <property name="processDefinitionKey" value="activiti$activitiReview" />
+  
+   <bean id="processExecutor" abstract="true">
       <property name="runtimeService" ref="activitiRuntimeService"/>
       <property name="workflowService" ref="WorkflowService"/>
       <property name="personService" ref="personService"/>
+      <property name="behaviourFilter" ref="policyBehaviourFilter"/>
+      <property name="nodeService" ref="nodeService"/>
+   </bean>
+
+   <bean id="activitiReviewProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.ReviewProcessExecutor" parent="processExecutor">
+      <property name="processDefinitionKey" value="activiti$activitiReview" />
    </bean>
    
-   <bean id="activitiAdhoqProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.ReviewProcessExecutor">
+   <bean id="activitiAdhoqProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.ReviewProcessExecutor" parent="processExecutor">
       <property name="processDefinitionKey" value="activiti$activitiAdhoc" />
-      <property name="runtimeService" ref="activitiRuntimeService"/>
-      <property name="workflowService" ref="WorkflowService"/>
-      <property name="personService" ref="personService"/>
    </bean>   
  
-   <bean id="activitiReviewPooledProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.PooledReviewProcessExecutor">
+   <bean id="activitiReviewPooledProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.PooledReviewProcessExecutor" parent="processExecutor">
       <property name="processDefinitionKey" value="activiti$activitiReviewPooled" />
-      <property name="runtimeService" ref="activitiRuntimeService"/>
-      <property name="authorityService" ref="authorityService"/>  
-      <property name="workflowService" ref="WorkflowService"/>
-      <property name="personService" ref="personService"/>
+      <property name="authorityService" ref="authorityService"/>
    </bean>
       
    <bean  id="demoProcessEnricher" class="org.alfresco.analytics.activiti.demo.enrichers.DemoProcessEnricher">

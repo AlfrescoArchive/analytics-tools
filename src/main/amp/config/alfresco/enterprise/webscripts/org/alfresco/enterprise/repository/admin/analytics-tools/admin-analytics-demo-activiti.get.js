@@ -7,3 +7,7 @@
  */
 model.tools = Admin.getConsoleTools("admin-analytics-demo-activiti");
 model.people = groups.getGroup("ANALYTICS_DEMO_USERS").getAllUsers();
+model.processList = ["activitiAdhoc",
+                     "activitiReview",
+                     "activitiReviewPooled"];
+model.priorities = [1,2,3]

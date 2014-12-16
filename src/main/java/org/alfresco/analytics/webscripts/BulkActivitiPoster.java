@@ -38,17 +38,28 @@ public class BulkActivitiPoster extends AbstractBulkPoster
         String[] users = req.getParameterValues("people");
         List<NodeRef> nodes = getNodeRefs(req.getParameter("content"));
         String[] processes = req.getParameterValues("processes");
+        List<Integer> priorities = getPriorities(req.getParameterValues("priorities"));
         List<String> processDefinitions = makeGlobalIds(processes);
         
         //InProgress flag (ie. don't complete it)
         //Priority   
-        int processedCount = activitiManager.startProcesses(processDefinitions, Arrays.asList(users), nodes, startAndEnd.getFirst(), startAndEnd.getSecond(),  numberOfValues);
+        int processedCount = activitiManager.startProcesses(processDefinitions, Arrays.asList(users), nodes, priorities, startAndEnd.getFirst(), startAndEnd.getSecond(),  numberOfValues);
         
         model.put("requested", numberOfValues);
         model.put("resultSize", processedCount);
         model.put("from", startAndEnd.getFirst().toString());
         model.put("to", startAndEnd.getSecond().toString());
         return model;
+    }
+
+    private List<Integer> getPriorities(String[] prior)
+    {
+        List<Integer> priorities = new ArrayList<Integer>();
+        for (int i = 0; i < prior.length; i++)
+        {
+            priorities.add(Integer.parseInt(prior[i]));
+        }
+        return priorities;
     }
 
     private List<String> makeGlobalIds(String[] processes)

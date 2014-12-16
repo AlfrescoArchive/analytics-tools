@@ -97,9 +97,10 @@ public class PublishingIntegrationTest
        List<String> definitions = Arrays.asList("activitiAdhoc","activitiReview", "activitiReviewPooled");
        LocalDate startDate = LocalDate.parse("2014-10-01");
        LocalDate endDate= LocalDate.parse("2014-10-14");
-       int numberOfProcesses = 500; 
+       int numberOfProcesses = 500;
+       List<Integer> priorities = Arrays.asList(1,2,3);
        List<NodeRef> nodes = Arrays.asList(new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, "xyz"));
-       List<DemoActivitiProcess> process = factory.createActivitiDemoProcesses(definitions, users, nodes, startDate, endDate, numberOfProcesses);
+       List<DemoActivitiProcess> process = factory.createActivitiDemoProcesses(definitions, users, nodes, priorities, startDate, endDate, numberOfProcesses);
        for (DemoActivitiProcess demoActivitiProcess : process)
        {
            logger.debug(demoActivitiProcess);
@@ -107,7 +108,7 @@ public class PublishingIntegrationTest
            assertTrue(demoActivitiProcess.getEndTime().isBefore(endDate.plusDays(1).toDateTimeAtStartOfDay().plus(1)));
            assertTrue(demoActivitiProcess.getDueTime().isAfter(demoActivitiProcess.getStartTime()));
            assertTrue(demoActivitiProcess.getDueTime().isBefore(demoActivitiProcess.getEndTime())||demoActivitiProcess.getDueTime().isEqual(demoActivitiProcess.getEndTime()));
-           assertEquals(demoActivitiProcess.getContentNode(), nodes.get(0));
+           assertEquals(demoActivitiProcess.getContentNodes().get(0), nodes.get(0));
        }
     }
 

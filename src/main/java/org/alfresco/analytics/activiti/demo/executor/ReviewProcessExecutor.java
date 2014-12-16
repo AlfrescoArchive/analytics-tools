@@ -7,15 +7,20 @@ import java.util.Map;
 
 import org.activiti.engine.RuntimeService;
 import org.alfresco.analytics.activiti.DemoActivitiProcess;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.workflow.BPMEngineRegistry;
+import org.alfresco.repo.workflow.PackageManager;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Executes the review process
@@ -28,6 +33,10 @@ public class ReviewProcessExecutor implements DemoProcessExecutor
     protected RuntimeService runtimeService;
     protected WorkflowService workflowService;
     protected PersonService personService;
+    protected BehaviourFilter behaviourFilter;
+    protected NodeService nodeService;
+    
+    private static Log logger = LogFactory.getLog(ReviewProcessExecutor.class);
     
     @Override
     public void executeDemoProcess(DemoActivitiProcess demoProcess, boolean complete)
@@ -64,12 +73,19 @@ public class ReviewProcessExecutor implements DemoProcessExecutor
     {
         NodeRef person = personService.getPerson(demoProcess.getUser());
         properties.put(WorkflowModel.ASSOC_ASSIGNEE, person);
-        Serializable wfPackage = workflowService.createPackage(null);
-        properties.put(WorkflowModel.ASSOC_PACKAGE, wfPackage);
+        setupPackage(demoProcess, properties);
         
         properties.put(WorkflowModel.PROP_WORKFLOW_DUE_DATE, demoProcess.getDueTime().toDate());
-        properties.put(WorkflowModel.PROP_PRIORITY, 69);
+        properties.put(WorkflowModel.PROP_PRIORITY, demoProcess.getPriority());
         properties.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION,reviewDef.getTitle()+" due on "+demoProcess.getDueTime().toLocalDate().toString()+" for "+demoProcess.getUser());
+    }
+
+    protected void setupPackage(DemoActivitiProcess demoProcess, Map<QName, Serializable> properties)
+    {
+        PackageManager pm = new PackageManager(workflowService, nodeService, behaviourFilter, logger);
+        pm.addItems(demoProcess.getContentNodes());
+        Serializable wfPackage = pm.create(null);
+        properties.put(WorkflowModel.ASSOC_PACKAGE, wfPackage);
     }
 
     @Override
@@ -97,6 +113,16 @@ public class ReviewProcessExecutor implements DemoProcessExecutor
     public void setPersonService(PersonService personService)
     {
         this.personService = personService;
+    }
+
+    public void setBehaviourFilter(BehaviourFilter behaviourFilter)
+    {
+        this.behaviourFilter = behaviourFilter;
+    }
+
+    public void setNodeService(NodeService nodeService)
+    {
+        this.nodeService = nodeService;
     }
 
 }
