@@ -29,7 +29,6 @@ public class BulkEventPoster extends AbstractBulkPoster
 {
 
     private static Log logger = LogFactory.getLog(BulkEventPoster.class);
-    private FileFolderService fileService;
     
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache)
@@ -69,17 +68,12 @@ public class BulkEventPoster extends AbstractBulkPoster
     {
         List<String> nodes = new ArrayList<String>();
         NodeRef nodeRef = new NodeRef(noderef);
-        List<FileInfo> files = fileService.listFiles(nodeRef);
+        List<FileInfo> files = fileFolderService.listFiles(nodeRef);
         for (FileInfo fileInfo : files)
         {
             nodes.add(fileInfo.getNodeRef().getId());
         }
         return nodes;
-    }
-    
-    public void setFileService(FileFolderService fileService)
-    {
-        this.fileService = fileService;
     }
 
 

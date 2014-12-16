@@ -95,19 +95,39 @@
           <groupId>org.alfresco.services</groupId>
           <artifactId>alfresco-events-repo-publishing</artifactId>
           <version>1.2.4</version>
-<!--           <scope>runtime</scope> -->
+          <scope>provided</scope>
         </dependency>
+        <dependency>
+          <groupId>org.alfresco.services</groupId>
+          <artifactId>alfresco-events</artifactId>
+          <version>1.2.4</version>
+          <classifier>tests</classifier>          
+          <scope>test</scope>
+        </dependency> 
+        <dependency>
+          <groupId>org.alfresco.services</groupId>
+          <artifactId>alfresco-events-repo-publishing</artifactId>
+          <version>1.2.4</version>
+          <classifier>tests</classifier>          
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.alfresco.services</groupId>
+          <artifactId>alfresco-messaging-repo</artifactId>
+          <version>1.2.4</version>
+          <scope>provided</scope>
+        </dependency>             
         <dependency>
           <groupId>org.alfresco.services</groupId>
           <artifactId>alfresco-events-repo-activiti</artifactId>
           <version>1.2.4</version>
- <!--          <scope>runtime</scope> -->
+          <scope>provided</scope>
         </dependency>
          <dependency>
           <groupId>org.apache.camel</groupId>
           <artifactId>camel-spring</artifactId>
           <version>2.13.2</version>
-<!--           <scope>runtime</scope>   -->          
+          <scope>provided</scope>          
          </dependency>           
          <dependency>
           <groupId>org.alfresco.services</groupId>
@@ -119,7 +139,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>           
+            <scope>provided</scope>           
         </dependency>                           
     </dependencies>
     <build>

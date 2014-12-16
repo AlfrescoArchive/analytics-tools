@@ -2,6 +2,7 @@
 package org.alfresco.analytics.webscripts;
 
 import org.alfresco.analytics.event.EventFactory;
+import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.security.PersonService.PersonInfo;
 import org.alfresco.service.cmr.site.SiteInfo;
@@ -19,8 +20,9 @@ public abstract class AbstractBulkPoster extends DeclarativeWebScript
 {
 
     protected EventFactory factory;
-    private PersonService personService;
-    private SiteService siteService;
+    protected PersonService personService;
+    protected SiteService siteService;
+    protected FileFolderService fileFolderService;    
 
     protected int getNumberOfValues(String number)
     {
@@ -84,5 +86,11 @@ public abstract class AbstractBulkPoster extends DeclarativeWebScript
     {
         this.siteService = siteService;
     }
+
+    public void setFileFolderService(FileFolderService fileFolderService)
+    {
+        this.fileFolderService = fileFolderService;
+    }
+
 
 }

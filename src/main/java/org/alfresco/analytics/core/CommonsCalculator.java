@@ -1,7 +1,6 @@
 package org.alfresco.analytics.core;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.math3.distribution.IntegerDistribution;

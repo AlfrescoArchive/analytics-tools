@@ -15,6 +15,8 @@ import org.alfresco.events.types.UserManagementEvent;
 import org.alfresco.repo.Client;
 import org.alfresco.repo.Client.ClientType;
 import org.alfresco.repo.site.TestSiteInfoImpl;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteVisibility;
@@ -95,8 +97,9 @@ public class PublishingIntegrationTest
        List<String> definitions = Arrays.asList("activitiAdhoc","activitiReview", "activitiReviewPooled");
        LocalDate startDate = LocalDate.parse("2014-10-01");
        LocalDate endDate= LocalDate.parse("2014-10-14");
-       int numberOfProcesses = 500;       
-       List<DemoActivitiProcess> process = factory.createActivitiDemoProcesses(definitions, users, startDate, endDate, numberOfProcesses);
+       int numberOfProcesses = 500; 
+       List<NodeRef> nodes = Arrays.asList(new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, "xyz"));
+       List<DemoActivitiProcess> process = factory.createActivitiDemoProcesses(definitions, users, nodes, startDate, endDate, numberOfProcesses);
        for (DemoActivitiProcess demoActivitiProcess : process)
        {
            logger.debug(demoActivitiProcess);
@@ -104,6 +107,7 @@ public class PublishingIntegrationTest
            assertTrue(demoActivitiProcess.getEndTime().isBefore(endDate.plusDays(1).toDateTimeAtStartOfDay().plus(1)));
            assertTrue(demoActivitiProcess.getDueTime().isAfter(demoActivitiProcess.getStartTime()));
            assertTrue(demoActivitiProcess.getDueTime().isBefore(demoActivitiProcess.getEndTime())||demoActivitiProcess.getDueTime().isEqual(demoActivitiProcess.getEndTime()));
+           assertEquals(demoActivitiProcess.getContentNode(), nodes.get(0));
        }
     }
 

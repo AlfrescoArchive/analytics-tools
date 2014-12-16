@@ -1,5 +1,9 @@
 package org.alfresco.analytics.activiti;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.joda.time.DateTime;
 
 /**
@@ -16,9 +20,10 @@ public class DemoActivitiProcess
     private DateTime startTime;    
     private DateTime endTime;
     private String user;
+    private List<NodeRef> contentNode = new ArrayList<NodeRef>();
 
     public DemoActivitiProcess(String processId, String definitionKey, DateTime startTime,
-                DateTime endTime, DateTime dueTime,  String user)
+                DateTime endTime, DateTime dueTime,  String user, NodeRef content)
     {
         super();
         this.processId = processId;
@@ -27,6 +32,10 @@ public class DemoActivitiProcess
         this.endTime = endTime;
         this.dueTime = dueTime;
         this.user = user;
+        if (content!=null)
+        {
+            contentNode.add(content);            
+        }
     }
 
     public String getProcessId()
@@ -64,15 +73,20 @@ public class DemoActivitiProcess
         this.processId = processId;
     }
 
+    public NodeRef getContentNode()
+    {
+        return this.contentNode.get(0);
+    }
+    
     @Override
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Activiti Process [processId=").append(this.processId)
+        builder.append("DemoActivitiProcess [processId=").append(this.processId)
                     .append(", definitionKey=").append(this.definitionKey).append(", dueTime=")
                     .append(this.dueTime).append(", startTime=").append(this.startTime)
                     .append(", endTime=").append(this.endTime).append(", user=").append(this.user)
-                    .append("]");
+                    .append(", contentNode=").append(this.contentNode).append("]");
         return builder.toString();
     }
 

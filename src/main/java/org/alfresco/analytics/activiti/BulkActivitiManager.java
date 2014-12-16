@@ -7,6 +7,9 @@ import java.util.Map;
 import org.alfresco.analytics.activiti.demo.executor.DemoProcessExecutor;
 import org.alfresco.analytics.event.EventFactory;
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.repo.workflow.BPMEngineRegistry;
+import org.alfresco.repo.workflow.activiti.ActivitiConstants;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.LocalDate;
@@ -32,7 +35,8 @@ public class BulkActivitiManager implements InitializingBean, ApplicationContext
 
     public DemoActivitiProcess lookupProcess(String processId, String definitionKey)
     {
-        if (inFlightProcesses.containsKey(processId)) return inFlightProcesses.get(inFlightProcesses);
+        if (inFlightProcesses.containsKey(processId)) return inFlightProcesses.get(processId);
+        definitionKey = makeGlobalId(definitionKey);
         if (currentProcess.getDefinitionKey().equals(definitionKey))
         {
             currentProcess.setProcessId(processId);
@@ -41,17 +45,29 @@ public class BulkActivitiManager implements InitializingBean, ApplicationContext
         }
         throw new AlfrescoRuntimeException("Unknown demo process for "+definitionKey);
     }
+
+    public static String makeGlobalId(String definitionKey)
+    {
+        if (!BPMEngineRegistry.isGlobalId(definitionKey, ActivitiConstants.ENGINE_ID))
+        {
+            definitionKey = BPMEngineRegistry.createGlobalId(ActivitiConstants.ENGINE_ID, definitionKey);
+        }
+        return definitionKey;
+    }
     
     /**
      * Starts the number of processes
      * @param numberOfProcesses
      * @return the actual processes created
      */
-    public int startProcesses(List<String> definitions, List<String> users, LocalDate startDate, LocalDate endDate, int numberOfProcesses)
+    public int startProcesses(List<String> definitions, List<String> users, List<NodeRef> nodes, LocalDate startDate, LocalDate endDate, int numberOfProcesses)
     {
         
-        List<DemoActivitiProcess> processes = factory.createActivitiDemoProcesses(definitions, users, startDate, endDate, numberOfProcesses);
+        List<DemoActivitiProcess> processes = factory.createActivitiDemoProcesses(definitions, users, nodes, startDate, endDate, numberOfProcesses);
         int processedCount = 0;
+        
+        inFlightProcesses = new HashMap<String, DemoActivitiProcess>();
+        
         for (DemoActivitiProcess demoActivitiProcess : processes)
         {
             currentProcess = demoActivitiProcess;

@@ -1,4 +1,4 @@
-package org.alfresco.analytics.activiti.demo;
+package org.alfresco.analytics.activiti.demo.enrichers;
 
 import org.alfresco.analytics.activiti.BulkActivitiManager;
 import org.alfresco.analytics.activiti.DemoActivitiProcess;

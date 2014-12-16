@@ -19,8 +19,16 @@
       <property name="workflowService" ref="WorkflowService"/>
       <property name="personService" ref="personService"/>
    </bean>   
-   
-   <bean  id="demoProcessEnricher" class="org.alfresco.analytics.activiti.demo.DemoProcessEnricher">
+ 
+   <bean id="activitiReviewPooledProcessExecutor" class="org.alfresco.analytics.activiti.demo.executor.PooledReviewProcessExecutor">
+      <property name="processDefinitionKey" value="activiti$activitiReviewPooled" />
+      <property name="runtimeService" ref="activitiRuntimeService"/>
+      <property name="authorityService" ref="authorityService"/>  
+      <property name="workflowService" ref="WorkflowService"/>
+      <property name="personService" ref="personService"/>
+   </bean>
+      
+   <bean  id="demoProcessEnricher" class="org.alfresco.analytics.activiti.demo.enrichers.DemoProcessEnricher">
       <property name="manager" ref="activitibulkManager"/>
    </bean>
    

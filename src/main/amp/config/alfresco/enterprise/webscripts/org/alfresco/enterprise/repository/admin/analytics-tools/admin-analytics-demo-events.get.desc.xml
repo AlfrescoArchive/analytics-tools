@@ -1,0 +1,10 @@
+<webscript>
+   <shortname>Analytics Demo Events</shortname>
+   <description><![CDATA[Admin Console WebScript that creates Analytics demo data.]]></description>
+   <url>/enterprise/admin/admin-analytics-demo-events</url>
+   <family>AdminConsole</family>
+   <format default="html">argument</format>
+   <authentication>admin</authentication>
+   <lifecycle>internal</lifecycle>
+   <transaction allow="readonly">required</transaction>   
+</webscript>

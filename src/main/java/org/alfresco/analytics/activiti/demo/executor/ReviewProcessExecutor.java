@@ -25,33 +25,25 @@ import org.alfresco.service.namespace.QName;
 public class ReviewProcessExecutor implements DemoProcessExecutor
 {
     private String processDefinitionKey;
-    private RuntimeService runtimeService;
-    private WorkflowService workflowService;
-    private PersonService personService;
+    protected RuntimeService runtimeService;
+    protected WorkflowService workflowService;
+    protected PersonService personService;
     
     @Override
     public void executeDemoProcess(DemoActivitiProcess demoProcess, boolean complete)
     {
         WorkflowDefinition reviewDef = workflowService.getDefinitionByName(processDefinitionKey);
-        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();        
-        NodeRef person = personService.getPerson(demoProcess.getUser());
-        properties.put(WorkflowModel.ASSOC_ASSIGNEE, person);
-        Serializable wfPackage = workflowService.createPackage(null);
-        properties.put(WorkflowModel.ASSOC_PACKAGE, wfPackage);
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         
-        properties.put(WorkflowModel.PROP_WORKFLOW_DUE_DATE, demoProcess.getDueTime().toDate());
-        properties.put(WorkflowModel.PROP_PRIORITY, 69);
-        properties.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION,reviewDef.getTitle()+" due on "+demoProcess.getDueTime().toLocalDate().toString()+" for "+demoProcess.getUser());
-        
+        setStartProperties(demoProcess, reviewDef, properties);
         WorkflowPath path = workflowService.startWorkflow(reviewDef.getId(), properties);
         String workflowInstanceId = path.getInstance().getId();
-        String processInstanceId = BPMEngineRegistry.getLocalId(workflowInstanceId);
         
+        String processInstanceId = BPMEngineRegistry.getLocalId(workflowInstanceId);
         WorkflowTask startTask = workflowService.getStartTask(workflowInstanceId);
         workflowService.endTask(startTask.getId(), null);
         
-        //Add variable wf_reviewOutcome 'Approve'
-        runtimeService.setVariable(processInstanceId, "wf_reviewOutcome", "Approve");
+        setProcessVariables(processInstanceId);
         
         List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
         for (WorkflowTask workflowTask : tasks)
@@ -60,6 +52,24 @@ public class ReviewProcessExecutor implements DemoProcessExecutor
         }
         
         workflowService.deleteWorkflow(workflowInstanceId);       
+    }
+
+    protected void setProcessVariables(String processInstanceId)
+    {
+        //Add variable wf_reviewOutcome 'Approve'
+        runtimeService.setVariable(processInstanceId, "wf_reviewOutcome", "Approve");
+    }
+
+    protected void setStartProperties(DemoActivitiProcess demoProcess, WorkflowDefinition reviewDef, Map<QName, Serializable> properties)
+    {
+        NodeRef person = personService.getPerson(demoProcess.getUser());
+        properties.put(WorkflowModel.ASSOC_ASSIGNEE, person);
+        Serializable wfPackage = workflowService.createPackage(null);
+        properties.put(WorkflowModel.ASSOC_PACKAGE, wfPackage);
+        
+        properties.put(WorkflowModel.PROP_WORKFLOW_DUE_DATE, demoProcess.getDueTime().toDate());
+        properties.put(WorkflowModel.PROP_PRIORITY, 69);
+        properties.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION,reviewDef.getTitle()+" due on "+demoProcess.getDueTime().toLocalDate().toString()+" for "+demoProcess.getUser());
     }
 
     @Override

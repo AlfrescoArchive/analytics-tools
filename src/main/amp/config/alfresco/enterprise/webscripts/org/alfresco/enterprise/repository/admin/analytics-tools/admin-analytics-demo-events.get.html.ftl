@@ -45,14 +45,14 @@
    <div class="column-left">
       <div class="control field">
          <span class="label">Date From</span>
-         <input type="text" id="startDate">
+         <input type="text" id="startDate" name="startDate">
          <span class="description">When should events start?</span>
       </div>
    </div>
    <div class="column-right">
       <div class="control field">
          <span class="label">Date To</span>
-         <input type="text" id="endDate">
+         <input type="text" id="endDate" name="endDate">
          <span class="description">When should events end?</span>
       </div>
    </div>
@@ -150,7 +150,7 @@
                     $.getJSON("${url.serviceContext}/enterprise/admin/admin-analytics-bulkevent",
                               $("#admin-jmx-form").serializeArray(), 
                               function( data ) {
-                                   $("#result").append("<br/>Successfully created "+data.totalRows +" events.<br/>");
+                                   $("#result").append("<br/>Successfully created "+data.totalRows +" events from "+data.from +" to "+data.to +" <br/>");
                              })
                              .fail(function() {
                                $("#result").text("Something went wrong.<br/>");

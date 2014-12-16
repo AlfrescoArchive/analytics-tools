@@ -1,42 +1,41 @@
 package org.alfresco.analytics.activiti;
 
+import java.util.EventObject;
+
 import org.alfresco.events.activiti.ProcessEvent;
 import org.alfresco.messaging.camel.routes.IsEventTypePredicate;
 import org.alfresco.messaging.camel.routes.IsTypePredicate;
-import org.apache.camel.CamelContext;
-import org.apache.camel.Route;
-import org.apache.camel.StartupListener;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.model.ModelCamelContext;
 import org.apache.camel.model.RouteDefinition;
+import org.apache.camel.support.EventNotifierSupport;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * DemoRouteFixer
+ * DemoRouteFixer, changes the route definitions whilst Camel
+ * is starting up and adds in some special enrichers
  *
  * @author Gethin James
  */
-public class DemoRouteFixer implements InitializingBean, StartupListener
+public class DemoRouteFixer implements InitializingBean
 {
-
     private ModelCamelContext camelContext;    
     private static IsTypePredicate isProcessEvent = new IsEventTypePredicate(ProcessEvent.class);
+    private static String routeId = "Activiti SourceEvents -> Enrichers";
     
     @Override
     public void afterPropertiesSet() throws Exception
     {
-       // camelContext.addStartupListener(this);
+        camelContext.getManagementStrategy().addEventNotifier(new DemoSetupEventNotifier()); 
     }
 
-    public void weave(String routeId, AdviceWithRouteBuilder builder) throws Exception 
+    public RouteDefinition weave(String routeId, AdviceWithRouteBuilder builder) throws Exception 
     {
-        camelContext.getRouteDefinition(routeId).adviceWith(camelContext, builder);
+        return camelContext.getRouteDefinition(routeId).adviceWith(camelContext, builder);
     }
     
-    @Override
-    public void onCamelContextStarted(CamelContext context, boolean alreadyStarted)
-                throws Exception
-    {   String routeId = "Activiti SourceEvents -> Enrichers";
+    public void modifyRouteDefinition() throws Exception
+    {   
         weave(routeId, new AdviceWithRouteBuilder() {
             @Override
             public void configure() throws Exception {
@@ -44,15 +43,6 @@ public class DemoRouteFixer implements InitializingBean, StartupListener
                .choice().when(isProcessEvent).beanRef("demoProcessEnricher").end();
             }
         });
-        RouteDefinition def = camelContext.getRouteDefinition(routeId);
-        def.markPrepared();
-        camelContext.addRouteDefinition(def);
-        Route route = camelContext.getRoute(routeId);
-        System.out.println(route);
-        System.out.println("startable: "+def.isStartable(context));
-        camelContext.startRoute(routeId);
-        route = camelContext.getRoute(routeId);
-        System.out.println(def.getStatus(context));
     }
 
     public void setCamelContext(ModelCamelContext camelContext)
@@ -60,4 +50,27 @@ public class DemoRouteFixer implements InitializingBean, StartupListener
         this.camelContext = camelContext;
     }
 
+    public class DemoSetupEventNotifier extends EventNotifierSupport
+    {
+
+        @Override
+        public void notify(EventObject event) throws Exception
+        {
+            //No Op       
+        }
+
+        @Override
+        public boolean isEnabled(EventObject event)
+        {
+            return true;
+        }
+
+        @Override
+        protected void doStart() throws Exception
+        {
+            //At this point in the lifecycle change the route definition
+            modifyRouteDefinition();
+        }
+        
+    }
 }
