@@ -9,6 +9,20 @@
    </div>
    <div class="column-left">
       <div class="control options">
+         <span class="label">${msg("People")?html}:</span>
+         <span class="value">
+            <select id="people" name="people" tabindex="1" multiple size="10">
+              <#list people as p>
+                  <option value="${p.userName?html}" selected="true">${p.fullName?html}</option>
+               </#list>
+            </select>
+         </span>
+         <span class="description">Choose Multiple People (about 10). This list shows all the people in the "ANALYTICS_DEMO_USERS" group.
+            Normally, users don't need to be in a specific group to record analytics (only for this demo data).</span>         
+      </div>
+   </div>
+   <div class="column-right">
+      <div class="control options">
          <span class="label">${msg("Process Types")?html}:</span>
          <span class="value">
             <select id="processes" name="processes" tabindex="0" multiple size="4">
@@ -18,7 +32,7 @@
             </select>
          </span>
          <span class="description">The processes to use.</span>         
-      </div>  
+      </div>
       <div class="control options">
          <span class="label">${msg("Priorities")?html}:</span>
          <span class="value">
@@ -30,20 +44,17 @@
          </span>
          <span class="description">The workflow priorities to use.</span>         
       </div>
-   </div>
-   <div class="column-right">
       <div class="control options">
-         <span class="label">${msg("People")?html}:</span>
+         <span class="label">${msg("Task State")?html}:</span>
          <span class="value">
-            <select id="people" name="people" tabindex="1" multiple size="10">
-              <#list people as p>
-                  <option value="${p.userName?html}" selected="true">${p.fullName?html}</option>
+            <select id="state" name="state" tabindex="0" multiple size="4">
+              <#list taskStateList as s>
+                  <option value="${s?html}" selected="true">${s?html}</option>
                </#list>
             </select>
          </span>
-         <span class="description">Choose Multiple People (about 10). This list shows all the people in the "ANALYTICS_DEMO_USERS" group.
-            Normally, users don't need to be in a specific group to record analytics (only for this demo data).</span>         
-      </div>      
+         <span class="description">Should the tasks be early/overdue? (Select one)</span>         
+      </div>              
    </div>
    <div id="contentSource" class="column-full">
       <div class="control field">
@@ -104,10 +115,10 @@
         });
         $("#startDate").datepicker( "setDate", "-6m" );
         $("#endDate").datepicker( "setDate", "-1d" );
-                      
+                              
         $( "#upload-events" ).click(function( event ) {
            $("#confirmMessage").text("Would you like to create "+$("#numberOfValues").val()+ " processes for "+$("#processes option:selected").size()+ " process types, "+$("#priorities option:selected").size()+ " priorities and "+$("#people option:selected").size()
-                                      + " people. The events will be distributed uniformly from "+$("#startDate").val()+ " to "+$("#endDate").val()+". ");
+                                      + " people. The events will be distributed uniformly from "+$("#startDate").val()+ " to "+$("#endDate").val()+". All the tasks will be "+$("#state").val()+".");
            $("#dialog-confirm").dialog({
                resizable: false,
                height:250,

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.alfresco.analytics.activiti.BulkActivitiManager;
+import org.alfresco.analytics.activiti.DemoActivitiProcess.TaskState;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.Pair;
@@ -40,16 +41,25 @@ public class BulkActivitiPoster extends AbstractBulkPoster
         String[] processes = req.getParameterValues("processes");
         List<Integer> priorities = getPriorities(req.getParameterValues("priorities"));
         List<String> processDefinitions = makeGlobalIds(processes);
+        List<TaskState> state = getStates(req.getParameterValues("state"));
         
-        //InProgress flag (ie. don't complete it)
-        //Priority   
-        int processedCount = activitiManager.startProcesses(processDefinitions, Arrays.asList(users), nodes, priorities, startAndEnd.getFirst(), startAndEnd.getSecond(),  numberOfValues);
+        int processedCount = activitiManager.startProcesses(processDefinitions, Arrays.asList(users), nodes, priorities, startAndEnd.getFirst(), startAndEnd.getSecond(),  numberOfValues, state);
         
         model.put("requested", numberOfValues);
         model.put("resultSize", processedCount);
         model.put("from", startAndEnd.getFirst().toString());
         model.put("to", startAndEnd.getSecond().toString());
         return model;
+    }
+
+    private List<TaskState> getStates(String[] state)
+    {
+        List<TaskState> states = new ArrayList<TaskState>();
+        for (int i = 0; i < state.length; i++)
+        {
+            states.add(TaskState.valueOf(state[i].toUpperCase()));
+        }
+        return states;
     }
 
     private List<Integer> getPriorities(String[] prior)
@@ -83,6 +93,8 @@ public class BulkActivitiPoster extends AbstractBulkPoster
         }
         return nodes;
     }
+    
+    
     public void setActivitiManager(BulkActivitiManager activitiManager)
     {
         this.activitiManager = activitiManager;

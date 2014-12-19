@@ -29,7 +29,9 @@
    <bean  id="demoProcessEnricher" class="org.alfresco.analytics.activiti.demo.enrichers.DemoProcessEnricher">
       <property name="manager" ref="activitibulkManager"/>
    </bean>
-   
+   <bean  id="demoTaskEnricher" class="org.alfresco.analytics.activiti.demo.enrichers.DemoTaskEnricher">
+      <property name="manager" ref="activitibulkManager"/>
+   </bean>
    <bean id="activitibulkManager" class="org.alfresco.analytics.activiti.BulkActivitiManager">
         <property name="factory" ref="bulkEventFactory" />
    </bean>

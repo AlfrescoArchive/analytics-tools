@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.alfresco.analytics.activiti.DemoActivitiProcess;
+import org.alfresco.analytics.activiti.DemoActivitiProcess.TaskState;
 import org.alfresco.analytics.core.Calculator;
 import org.alfresco.analytics.core.CommonsCalculator;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -68,12 +69,14 @@ public class EventFactory
 
     }
     
-    public List<DemoActivitiProcess> createActivitiDemoProcesses(List<String> definitions, List<String> users, List<NodeRef> nodes, List<Integer> priorities, LocalDate startDate, LocalDate endDate, int numberOfProcesses)
+    public List<DemoActivitiProcess> createActivitiDemoProcesses(List<String> definitions, List<String> users, List<NodeRef> nodes, List<Integer> priorities, 
+                                                                 LocalDate startDate, LocalDate endDate, int numberOfProcesses, List<TaskState> state)
     {
         List<DemoActivitiProcess> processes = new ArrayList<DemoActivitiProcess>(numberOfProcesses);
         users =  calc.distributeValues(users, numberOfProcesses);
         definitions =  calc.distributeValues(definitions, numberOfProcesses);
         nodes = calc.distributeValues(nodes, numberOfProcesses);
+        state = calc.distributeValues(state, numberOfProcesses);
         priorities  = calc.distributeValues(priorities, numberOfProcesses);
         DateTime startTime = startDate.toDateTimeAtStartOfDay();
         DateTime endTime = endDate.plusDays(1).toDateTimeAtStartOfDay();
@@ -83,7 +86,7 @@ public class EventFactory
             DateTime processStart = calc.randomTime(startTime, endDate.toDateTimeAtStartOfDay().minus(1));
             DateTime processEnd = calc.randomTime(processStart.plusMinutes(30), endTime);
             DateTime processDue = calc.randomTime(processStart.plusMinutes(5), processEnd);
-            processes.add(new DemoActivitiProcess(null, definitions.get(i), processStart, processEnd, processDue, users.get(i), priorities.get(i), nodes.get(i)));
+            processes.add(new DemoActivitiProcess(null, definitions.get(i), processStart, processEnd, processDue, users.get(i), priorities.get(i), state.get(i), nodes.get(i)));
         }
         return processes;
     }

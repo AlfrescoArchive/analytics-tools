@@ -13,6 +13,10 @@ import org.joda.time.DateTime;
  */
 public class DemoActivitiProcess
 {
+    public static enum TaskState
+    {
+        EARLY, ONTIME, LATE;
+    }
     
     private String processId;
     private String definitionKey;
@@ -21,10 +25,11 @@ public class DemoActivitiProcess
     private DateTime endTime;
     private String user;
     private int priority;
+    private TaskState state;
     private List<NodeRef> contentNode = new ArrayList<NodeRef>();
 
     public DemoActivitiProcess(String processId, String definitionKey, DateTime startTime,
-                DateTime endTime, DateTime dueTime,  String user, int priority, NodeRef content)
+                DateTime endTime, DateTime dueTime,  String user, int priority, TaskState state, NodeRef content)
     {
         super();
         this.processId = processId;
@@ -34,6 +39,7 @@ public class DemoActivitiProcess
         this.dueTime = dueTime;
         this.user = user;
         this.priority = priority;
+        this.state = state;
         if (content!=null)
         {
             contentNode.add(content);            
@@ -84,6 +90,11 @@ public class DemoActivitiProcess
     {
         return this.priority;
     }
+
+    public TaskState getState()
+    {
+        return this.state;
+    }
     
     @Override
     public String toString()
@@ -93,10 +104,12 @@ public class DemoActivitiProcess
                     .append(", definitionKey=").append(this.definitionKey).append(", dueTime=")
                     .append(this.dueTime).append(", startTime=").append(this.startTime)
                     .append(", endTime=").append(this.endTime).append(", user=").append(this.user)
-                    .append(", priority=").append(this.priority).append(", contentNode=")
-                    .append(this.contentNode).append("]");
+                    .append(", priority=").append(this.priority).append(", state=")
+                    .append(this.state).append(", contentNode=").append(this.contentNode)
+                    .append("]");
         return builder.toString();
     }
+
 
 
 }

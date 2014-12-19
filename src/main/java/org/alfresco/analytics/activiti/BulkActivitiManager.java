@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.analytics.activiti.DemoActivitiProcess.TaskState;
 import org.alfresco.analytics.activiti.demo.executor.DemoProcessExecutor;
 import org.alfresco.analytics.event.EventFactory;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -61,10 +62,10 @@ public class BulkActivitiManager implements InitializingBean, ApplicationContext
      * @param numberOfProcesses
      * @return the actual processes created
      */
-    public int startProcesses(List<String> definitions, List<String> users, List<NodeRef> nodes, List<Integer> priorities, LocalDate startDate, LocalDate endDate, int numberOfProcesses)
+    public int startProcesses(List<String> definitions, List<String> users, List<NodeRef> nodes, List<Integer> priorities, LocalDate startDate, LocalDate endDate, int numberOfProcesses, List<TaskState> state)
     {
         
-        List<DemoActivitiProcess> processes = factory.createActivitiDemoProcesses(definitions, users, nodes, priorities, startDate, endDate, numberOfProcesses);
+        List<DemoActivitiProcess> processes = factory.createActivitiDemoProcesses(definitions, users, nodes, priorities, startDate, endDate, numberOfProcesses, state);
         int processedCount = 0;
         
         inFlightProcesses = new HashMap<String, DemoActivitiProcess>();

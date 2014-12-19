@@ -3,6 +3,7 @@ package org.alfresco.analytics.activiti;
 import java.util.EventObject;
 
 import org.alfresco.events.activiti.ProcessEvent;
+import org.alfresco.events.activiti.TaskEvent;
 import org.alfresco.messaging.camel.routes.IsEventTypePredicate;
 import org.alfresco.messaging.camel.routes.IsTypePredicate;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
@@ -21,6 +22,7 @@ public class DemoRouteFixer implements InitializingBean
 {
     private ModelCamelContext camelContext;    
     private static IsTypePredicate isProcessEvent = new IsEventTypePredicate(ProcessEvent.class);
+    private static IsTypePredicate isTaskEvent = new IsEventTypePredicate(TaskEvent.class);
     private static String routeId = "Activiti SourceEvents -> Enrichers";
     
     @Override
@@ -40,7 +42,8 @@ public class DemoRouteFixer implements InitializingBean
             @Override
             public void configure() throws Exception {
                weaveAddFirst()
-               .choice().when(isProcessEvent).beanRef("demoProcessEnricher").end();
+               .choice().when(isProcessEvent).beanRef("demoProcessEnricher").end()
+               .choice().when(isTaskEvent).beanRef("demoTaskEnricher").end();
             }
         });
     }

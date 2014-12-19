@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.alfresco.analytics.activiti.DemoActivitiProcess;
+import org.alfresco.analytics.activiti.DemoActivitiProcess.TaskState;
 import org.alfresco.analytics.event.EventFactory;
 import org.alfresco.analytics.event.EventHelper;
 import org.alfresco.analytics.event.EventPublisherForTestingOnly;
@@ -99,8 +100,9 @@ public class PublishingIntegrationTest
        LocalDate endDate= LocalDate.parse("2014-10-14");
        int numberOfProcesses = 500;
        List<Integer> priorities = Arrays.asList(1,2,3);
+       List<TaskState> state = Arrays.asList(TaskState.ONTIME);
        List<NodeRef> nodes = Arrays.asList(new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, "xyz"));
-       List<DemoActivitiProcess> process = factory.createActivitiDemoProcesses(definitions, users, nodes, priorities, startDate, endDate, numberOfProcesses);
+       List<DemoActivitiProcess> process = factory.createActivitiDemoProcesses(definitions, users, nodes, priorities, startDate, endDate, numberOfProcesses,state);
        for (DemoActivitiProcess demoActivitiProcess : process)
        {
            logger.debug(demoActivitiProcess);
@@ -109,6 +111,7 @@ public class PublishingIntegrationTest
            assertTrue(demoActivitiProcess.getDueTime().isAfter(demoActivitiProcess.getStartTime()));
            assertTrue(demoActivitiProcess.getDueTime().isBefore(demoActivitiProcess.getEndTime())||demoActivitiProcess.getDueTime().isEqual(demoActivitiProcess.getEndTime()));
            assertEquals(demoActivitiProcess.getContentNodes().get(0), nodes.get(0));
+           assertEquals(demoActivitiProcess.getState(), TaskState.ONTIME);
        }
     }
 
