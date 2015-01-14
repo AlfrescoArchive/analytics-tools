@@ -151,6 +151,7 @@
                buttons: {
                  "OK": function() {
                     $( this ).dialog( "close" );
+                    $( "#upload-events" ).hide();
                     $.getJSON("${url.serviceContext}/enterprise/admin/admin-analytics-bulkevent",
                               $("#admin-jmx-form").serializeArray(), 
                               function( data ) {
@@ -161,6 +162,7 @@
                              })
                              .always(function() {
                                event.preventDefault();
+                               $( "#upload-events" ).show();
                              });
                               
                               
