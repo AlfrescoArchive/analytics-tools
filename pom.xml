@@ -12,14 +12,9 @@
     <parent>
         <groupId>org.alfresco.maven</groupId>
         <artifactId>alfresco-sdk-parent</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>2.0.0</version>
     </parent>
-    <repositories>
-      <repository>
-         <id>snapshot central</id>
-         <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-      </repository>    
-    </repositories>
+
     <!-- 
        | SDK properties have sensible defaults in the SDK parent,
        | but you can override the properties below to use another version. 
@@ -36,6 +31,8 @@
         <alfresco.version>5.0</alfresco.version>
         <app.log.root.level>INFO</app.log.root.level>
         <alfresco.data.location>alf_data_dev</alfresco.data.location>
+        <!-- This controls which properties will be picked in src/test/properties for embedded run -->
+        <env>local</env>
         <!-- Defines the target WAR artifactId to run this amp, only used with the -Pamp-to-war switch
         .    | Allowed values: alfresco | share. Defaults to a repository AMP, but could point to your foundation WAR -->
         <alfresco.client.war>alfresco-enterprise</alfresco.client.war>
@@ -45,7 +42,6 @@
         <!-- Defines the target WAR version to run this amp, only used with the -Pamp-to-war switch -->
         <alfresco.client.war.version>5.0</alfresco.client.war.version>
         <!-- This controls which properties will be picked in src/test/properties for embedded run -->
-        <env>local</env>
         <alfresco.client.contextPath>alfresco</alfresco.client.contextPath>
     </properties>
     <!-- Here we realize the connection with the Alfresco selected platform 
@@ -71,7 +67,10 @@
     <dependencies>
         <dependency>
           <groupId>${alfresco.groupId}</groupId>
-          <artifactId>alfresco-repository</artifactId>
+          <artifactId>alfresco-enterprise</artifactId>
+          <version>${alfresco.version}</version>
+          <classifier>classes</classifier>
+          <scope>provided</scope>                
         </dependency>        
         <dependency>
           <groupId>${alfresco.groupId}</groupId>
@@ -81,55 +80,18 @@
           <scope>test</scope>          
         </dependency>
         <dependency>
-           <groupId>org.slf4j</groupId>
-           <artifactId>slf4j-api</artifactId>
-           <scope>test</scope>
-        </dependency>        
+          <groupId>org.alfresco.services</groupId>
+          <artifactId>alfresco-messaging-repo</artifactId>
+          <version>1.2.4</version>
+          <scope>provided</scope>
+        </dependency>            
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>3.2.10.RELEASE</version>
           <scope>test</scope>            
-        </dependency>        
+        </dependency>                
         <dependency>
-          <groupId>org.alfresco.services</groupId>
-          <artifactId>alfresco-events-repo-publishing</artifactId>
-          <version>1.2.4</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.alfresco.services</groupId>
-          <artifactId>alfresco-events</artifactId>
-          <version>1.2.4</version>
-          <classifier>tests</classifier>          
-          <scope>test</scope>
-        </dependency> 
-        <dependency>
-          <groupId>org.alfresco.services</groupId>
-          <artifactId>alfresco-events-repo-publishing</artifactId>
-          <version>1.2.4</version>
-          <classifier>tests</classifier>          
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.alfresco.services</groupId>
-          <artifactId>alfresco-messaging-repo</artifactId>
-          <version>1.2.4</version>
-          <scope>provided</scope>
-        </dependency>             
-        <dependency>
-          <groupId>org.alfresco.services</groupId>
-          <artifactId>alfresco-events-repo-activiti</artifactId>
-          <version>1.2.4</version>
-          <scope>provided</scope>
-        </dependency>
-         <dependency>
-          <groupId>org.apache.camel</groupId>
-          <artifactId>camel-spring</artifactId>
-          <version>2.13.2</version>
-          <scope>provided</scope>          
-         </dependency>           
-         <dependency>
           <groupId>org.alfresco.services</groupId>
           <artifactId>alfresco-events-repo-publishing</artifactId>
           <version>1.2.4</version>
