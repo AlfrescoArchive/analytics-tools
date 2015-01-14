@@ -1,8 +1,9 @@
 <webscript>
-   <shortname>Demo Activiti workflow</shortname>
+   <shortname>Activiti Demo workflow</shortname>
    <description><![CDATA[Admin Console WebScript that creates Analytics demo data for Activiti.]]></description>
    <url>/enterprise/admin/admin-analytics-demo-activiti</url>
    <family>AdminConsole</family>
+   <family>AdminConsole:Index:2</family>   
    <format default="html">argument</format>
    <authentication>admin</authentication>
    <lifecycle>internal</lifecycle>

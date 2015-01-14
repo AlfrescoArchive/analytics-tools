@@ -2,7 +2,8 @@
    <shortname>Analytics Demo Events</shortname>
    <description><![CDATA[Admin Console WebScript that creates Analytics demo data.]]></description>
    <url>/enterprise/admin/admin-analytics-demo-events</url>
-   <family>AdminConsole</family>
+   <family>AdminConsole</family>   
+   <family>AdminConsole:Index:1</family>
    <format default="html">argument</format>
    <authentication>admin</authentication>
    <lifecycle>internal</lifecycle>
