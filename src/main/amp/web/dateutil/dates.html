@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Date Manipulation</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<link rel="stylesheet" href="jquery-ui-1.11.2/jquery-ui.min.css">
+<script src="jquery-ui-1.11.2/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.css">
+<script>
+  var TIME_FORMAT = 'YYYY-MM-DD HH:mm';
+  
+  $(function() {
+    
+    $( "#tabs" ).tabs();
+    $( document ).tooltip();
+    $( "#start" ).datetimepicker({
+       dateFormat: "yy-mm-dd"
+    });
+    $( "#end" ).datetimepicker({
+       dateFormat: "yy-mm-dd"
+    });
+    $( "#due" ).datetimepicker({
+       dateFormat: "yy-mm-dd"
+    });
+    $( "#current" ).datetimepicker({
+       dateFormat: "yy-mm-dd"
+    });    
+    $( "#calcme" ).button().click(function( event ) {
+       //Get values
+       var start = moment($( "#start" ).datetimepicker('getDate'));
+       var end = moment($( "#end" ).datetimepicker('getDate'));
+       var due = moment($( "#due" ).datetimepicker('getDate'));
+       var current = moment($( "#current" ).datetimepicker('getDate'));
+       $( "#tstart").text(start.format(TIME_FORMAT));
+       $( "#tend").text(end.format(TIME_FORMAT));
+       $( "#tdue").text(due.format(TIME_FORMAT));
+       $( "#tcurrent").text(current.format(TIME_FORMAT));
+       
+       //Calculate
+       $( "#tdur").text(end.diff(start, 'days',true).toFixed(2));
+       $( "#tmins").text(end.diff(start, 'minutes'));
+       $( "#tvari").text(end.diff(due, 'days',true).toFixed(2));
+       $( "#tvarim").text(end.diff(due, 'minutes'));
+       $( "#tpdur").text(due.diff(start, 'days',true).toFixed(2));
+       $( "#tpdurmin").text(due.diff(start, 'minutes'));
+       $( "#tcd").text(current.diff(start, 'days',true).toFixed(2));
+       $( "#tco").text(current.diff(due, 'days',true).toFixed(2));
+       $( "#tcdm").text(current.diff(start, 'minutes'));
+       $( "#tcom").text(current.diff(due, 'minutes'));   
+    }); 
+  });
+  
+  var now = moment();
+  //alert(now.format());
+  </script>
+</head>
+<body style="font-size: 14px;">
+ 
+<p>Start: <input type="text" id="start"> End: <input type="text" id="end"></p>
+<p>Due: <input type="text" id="due"> Current: <input type="text" id="current"></p>
+<a id="calcme" href="#">Calculate</a>
+<div id="result">&nbsp;</div>
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Results</a></li>
+  </ul>
+  <div id="tabs-1">
+   <table id="allDates" border="1" class="ui-widget">
+      <thead class="ui-widget-header">
+          <tr>
+              <th>&nbsp;</th>
+              <th>Date</th>              
+          </tr>
+      </thead>
+      <tbody class="ui-widget-content">
+          <tr><td>Start</td> <td id="tstart"></td></tr>
+          <tr><td>End</td> <td id="tend"></td></tr>
+          <tr><td>Due</td> <td id="tdue"></td></tr>
+          <tr><td>Current</td> <td id="tcurrent"></td></tr>                       
+          </tr>
+      </tbody>
+   </table>
+   <p>
+      <table id="calcs" border="1" class="ui-widget">
+         <thead class="ui-widget-header">
+             <tr>
+                 <th title="end_date - start_date">Duration (Days)</th>
+                 <th title="end_date - start_date">Duration (Mins)</th>
+                 <th title="due_date - start-date"> Planned Duration(Days)</th>
+                 <th title="due_date - start-date"> Planned Duration(Mins)</th>
+                 <th title="Actual days overdue or early = end-date - due_date">Variance(Days)</th>
+                 <th title="Actual days overdue or early = end-date - due_date">Variance(Mins)</th>            
+             </tr>
+         </thead>
+         <tbody class="ui-widget-content">
+             <tr>
+                <td id="tdur"></td>
+                <td id="tmins"></td>
+                <td id="tpdur"></td>
+                <td id="tpdurmin"></td>
+                <td id="tvari"></td>
+                <td id="tvarim"></td>                     
+             </tr>
+         </tbody>
+      </table>
+      <p />
+     <table id="calcscur" border="1" class="ui-widget">
+         <thead class="ui-widget-header">
+             <tr>
+                 <th title="current_date - start_date">Current Duration (Days)</th>
+                 <th title="current_date - start_date">Current Duration (Mins)</th>
+                 <th title="current_date - due_date">Current overdue(Days)</th>                   
+                 <th title="current_date - due_date">Current overdue(Mins)</th>                 
+             </tr>
+         </thead>
+         <tbody class="ui-widget-content">
+             <tr>
+                <td id="tcd"></td>
+                <td id="tcdm"></td> 
+                <td id="tco"></td>                 
+                <td id="tcom"></td>                         
+             </tr>
+         </tbody>
+      </table>       
+   </p>  
+  </div>
+</div>
+</body>
+</html>
