@@ -30,26 +30,26 @@ public class BulkActivitiManager implements InitializingBean, ApplicationContext
     
     private ApplicationContext applicationContext;
     private EventFactory factory; 
-    private Map<String, DemoProcessExecutor> demoExecutors;
-    private Map<String, DemoActivitiProcess> inFlightProcesses;
+    private Map<String, DemoProcessExecutor> demoExecutors = new HashMap<String, DemoProcessExecutor>();
+    private Map<String, DemoActivitiProcess> inFlightProcesses = new HashMap<String, DemoActivitiProcess>();
     private DemoActivitiProcess currentProcess;
 
     public DemoActivitiProcess lookupProcess(String processId, String definitionKey)
     {
         if (inFlightProcesses.containsKey(processId)) return inFlightProcesses.get(processId);
         definitionKey = makeGlobalId(definitionKey);
-        if (currentProcess.getDefinitionKey().equals(definitionKey))
+        if (currentProcess !=null && currentProcess.getDefinitionKey().equals(definitionKey))
         {
             currentProcess.setProcessId(processId);
             inFlightProcesses.put(processId, currentProcess);
             return currentProcess;
         }
-        throw new AlfrescoRuntimeException("Unknown demo process for "+definitionKey);
+        return null;
     }
 
     public static String makeGlobalId(String definitionKey)
     {
-        if (!BPMEngineRegistry.isGlobalId(definitionKey, ActivitiConstants.ENGINE_ID))
+        if (definitionKey!= null && !BPMEngineRegistry.isGlobalId(definitionKey, ActivitiConstants.ENGINE_ID))
         {
             definitionKey = BPMEngineRegistry.createGlobalId(ActivitiConstants.ENGINE_ID, definitionKey);
         }
