@@ -1,10 +1,8 @@
 package org.alfresco.analytics.event;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.alfresco.events.enrichers.EnricherHelper;
 import org.alfresco.events.types.ActivityEvent;
