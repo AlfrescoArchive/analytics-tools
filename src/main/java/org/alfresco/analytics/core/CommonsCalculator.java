@@ -76,5 +76,11 @@ public class CommonsCalculator implements Calculator
         return startTime.plusMinutes(randomInterval.nextInt(1, minutes));
 
     }
+    
+    @Override
+    public int random(int lower, int upper)
+    {
+      return randomInterval.nextInt(lower, upper);  
+    }
 
 }

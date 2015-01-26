@@ -12,4 +12,5 @@ public interface Calculator
     public long[] distributeDates(LocalDate startDate, LocalDate endDate, int numberOfValues);
     public <T> List<T> distributeValues(List<T> values, int numberOfValues);
     public DateTime randomTime(DateTime startDate, DateTime endDate);
+    int random(int lower, int upper);
 }
