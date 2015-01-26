@@ -35,7 +35,7 @@ public class RandomEnricherHelperTest
     {
         FileInfo fileInfo = helper.getFileInfo("qwertyuiopkljhgfdsTHIS");
         assertNotNull(fileInfo);
-        assertTrue( fileInfo.getName().endsWith("THIS"));
+        assertNotNull(fileInfo.getName());
         assertEquals(ContentModel.PROP_CONTENT, fileInfo.getType());       
         assertTrue (!fileInfo.isFolder());
              
