@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RandomEnricherHelper
 {   
+    public static String RAND_TXT = "RND";
     private Calculator calc = new CommonsCalculator();
     static int filenamesUpper;
     static int mimetypesUpper;
@@ -33,7 +34,7 @@ public class RandomEnricherHelper
     FileInfo getFileInfo(String nodeId) 
     {
         String nodeEnd = nodeId.substring(nodeId.length()-4);
-        ContentData contentData = new ContentData("abc://xxx"+nodeEnd, mimetypes[calc.random(0,mimetypesUpper)], calc.random(1,100000000)*1000, "UTF-8", Locale.ENGLISH);
+        ContentData contentData = new ContentData("abc://xxx"+nodeEnd, mimetypes[calc.random(0,mimetypesUpper)], calc.random(1,1000000)*1000, "UTF-8", Locale.ENGLISH);
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         properties.put(ContentModel.PROP_NAME, filenames[calc.random(0,filenamesUpper)]);
         properties.put(ContentModel.PROP_CONTENT, contentData);

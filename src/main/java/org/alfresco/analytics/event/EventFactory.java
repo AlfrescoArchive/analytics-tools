@@ -3,6 +3,7 @@ package org.alfresco.analytics.event;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.alfresco.analytics.activiti.DemoActivitiProcess;
 import org.alfresco.analytics.activiti.DemoActivitiProcess.TaskState;
@@ -41,7 +42,16 @@ public class EventFactory
         activities = calc.distributeValues(activities, numberOfevents);
         users =  calc.distributeValues(users, numberOfevents);
         sites =  calc.distributeValues(sites, numberOfevents);
-        nodes =  calc.distributeValues(nodes, numberOfevents);
+        
+        if (nodes.size() > 0)
+        {
+            nodes =  calc.distributeValues(nodes, numberOfevents);
+        }
+        else
+        {
+            nodes = getRandomNodes(numberOfevents);
+        }
+        
         clients =  calc.distributeValues(clients, numberOfevents);
         
         if (activities.size() == numberOfevents && sites.size() == numberOfevents
@@ -89,6 +99,16 @@ public class EventFactory
             processes.add(new DemoActivitiProcess(null, definitions.get(i), processStart, processEnd, processDue, users.get(i), priorities.get(i), state.get(i), nodes.get(i)));
         }
         return processes;
+    }
+    
+    private List<String> getRandomNodes(int numberOfValues)
+    {
+        List<String> nodes = new ArrayList<String>();
+        for (int i = 0; i < numberOfValues; i++)
+        {
+            nodes.add(RandomEnricherHelper.RAND_TXT+UUID.randomUUID().toString());  
+        }
+        return nodes;
     }
 
     public void updateSite(SiteInfo info, LocalDate when)

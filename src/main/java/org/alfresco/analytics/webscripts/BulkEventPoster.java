@@ -6,13 +6,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.alfresco.repo.Client;
 import org.alfresco.repo.Client.ClientType;
-import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.Pair;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.LocalDate;
@@ -67,14 +68,17 @@ public class BulkEventPoster extends AbstractBulkPoster
     protected List<String> getNodes(String noderef)
     {
         List<String> nodes = new ArrayList<String>();
-        NodeRef nodeRef = new NodeRef(noderef);
-        List<FileInfo> files = fileFolderService.listFiles(nodeRef);
-        for (FileInfo fileInfo : files)
+        if (StringUtils.isNotEmpty(noderef))
         {
-            nodes.add(fileInfo.getNodeRef().getId());
+            NodeRef nodeRef = new NodeRef(noderef);
+            List<FileInfo> files = fileFolderService.listFiles(nodeRef);
+            for (FileInfo fileInfo : files)
+            {
+                nodes.add(fileInfo.getNodeRef().getId());
+            }           
         }
+
         return nodes;
     }
-
 
  }

@@ -1,8 +1,10 @@
 package org.alfresco.analytics.event;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.alfresco.events.enrichers.EnricherHelper;
 import org.alfresco.events.types.ActivityEvent;
@@ -29,6 +31,9 @@ public class EventHelper
     private EventPublisher eventPublisher;
     
     @Autowired
+    private RandomEnricherHelper randomEnricherHelper;
+
+    @Autowired
     private EnricherHelper enricherHelper;
     
     /**
@@ -44,8 +49,19 @@ public class EventHelper
     public void publishActivity(String activityType, String username, String siteId, String nodeId, Client client, long timestamp, String activityData)
     {
         FileInfo fileInfo = null;
-        if (nodeId != null) fileInfo = enricherHelper.getFileInfo(nodeId);
-        
+        if (nodeId != null)
+        {
+            if (nodeId.startsWith(RandomEnricherHelper.RAND_TXT))
+            {
+                nodeId = nodeId.substring(RandomEnricherHelper.RAND_TXT.length());
+                fileInfo = randomEnricherHelper.getFileInfo(nodeId);
+            }
+            else
+            {
+                fileInfo = enricherHelper.getFileInfo(nodeId);                
+            }
+        }
+
         publishActivity(activityType, username, siteId, nodeId, client, timestamp, activityData, fileInfo);
     }
     
@@ -161,4 +177,5 @@ public class EventHelper
             }
         });        
     }
+    
 }

@@ -37,9 +37,10 @@
    <div class="column-full">
       <div class="control field">
          <span class="label">Content source</span>
-         <input id="content" tabindex="0" value="workspace://SpacesStore/880a0f47-31b1-4101-b20b-4d325e54e8b1" name="content" style='width:50em'>
+         <input id="content" tabindex="0" value="workspace://SpacesStore/880a0f47-31b1-4101-b20b-4d325e54e8b1" name="content" style='width:50em'>&nbsp;
+            <a id="nodeClear" href="#" >Clear</a>
          <span class="description">This should be a nodeRef of a folder with files in, to use as demo data. It uses FileFolderServices.listFiles() to find files that are children of the noderef. 
-         The files don't have to actually be in the same Site as the Sites selected (above).</span>
+         The files don't have to actually be in the same Site as the Sites selected (above).  <b>If you would like to use random nodes then leave "Content source" blank.</b></span>
       </div>
    </div>   
    <div class="column-left">
@@ -115,6 +116,7 @@
                     "org.alfresco.documentlibrary.file-liked"];
       
       var clientTypes = ["webclient","cmis", "webdav"];
+      var clearNodeText = "If you 'clear' the content source then random nodes will be used.";
       
       jQuery( document ).ready(function( $ ) {
       
@@ -141,10 +143,24 @@
           $("#clients").append(new Option(clientTypes[i], clientTypes[i]));
         }
         $("#clients option").attr('selected','selected');
+        
+        $("#nodeClear").prop('title', clearNodeText);
+        $("#content").prop('title', clearNodeText);
+        
+        $(document).tooltip();
+        
+        $("#nodeClear" ).click(function( event ) {
+         $( "#content" ).val("");
+        });        
                 
         $( "#upload-events" ).click(function( event ) {
-           $("#confirmMessage").text("Would you like to create "+$("#numberOfValues").val()+ " events for "+$("#sites option:selected").size()+ " sites and "+$("#people option:selected").size()
-                                      + " people. The events will be distributed uniformly from "+$("#startDate").val()+ " to "+$("#endDate").val()+" using "+$("#events option:selected").size()+ " event types and "+$("#clients option:selected").size()+ " client types.");
+           var confirmMess = "Would you like to create "+$("#numberOfValues").val()+ " events for "+$("#sites option:selected").size()+ " sites and "+$("#people option:selected").size()
+                                      + " people. The events will be distributed uniformly from "+$("#startDate").val()+ " to "+$("#endDate").val()+" using "+$("#events option:selected").size()
+                                      + " event types and "+$("#clients option:selected").size()+ " client types.";
+           if ($('#content').val()=='') {
+               confirmMess += "  Random nodes will be used.";
+           }
+           $("#confirmMessage").text(confirmMess);
            $("#dialog-confirm").dialog({
                resizable: false,
                height:250,
@@ -176,6 +192,8 @@
           
 
         });
+        
+        
       });
 //]]></script>
 <div id="dialog-confirm" title="Create Demo Events?">
