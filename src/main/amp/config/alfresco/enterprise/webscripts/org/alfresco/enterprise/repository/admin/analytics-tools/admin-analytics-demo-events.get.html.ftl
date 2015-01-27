@@ -17,7 +17,7 @@
                </#list>
             </select>
          </span>
-         <span class="description">Choose Multiple Sites (about 5)</span>         
+         <span class="description">Choose Multiple Sites (about 5) &nbsp;<a id="sitesSelect" href="#" >Select All</a></span>         
       </div>      
    </div>
    <div class="column-right">
@@ -31,7 +31,7 @@
             </select>
          </span>
          <span class="description">Choose Multiple People (about 10). This list shows all the people in the "ANALYTICS_DEMO_USERS" group.
-            Normally, users don't need to be in a specific group to record analytics (only for this demo data).</span>         
+            Normally, users don't need to be in a specific group to record analytics (only for this demo data).&nbsp;<a id="peopleSelect" href="#" >Select All</a></span>         
       </div>      
    </div>
    <div class="column-full">
@@ -132,17 +132,17 @@
         });
         $("#startDate").datepicker( "setDate", "-6m" );
         $("#endDate").datepicker( "setDate", "-1d" );
-        $("#sites option:first").attr('selected','selected');
+        $("#sites option:first").prop('selected', true);
         
         for (i = 0; i < eventTypes.length; i++) {
           $("#events").append(new Option(eventTypes[i], eventTypes[i]));
         }
-        $("#events option").attr('selected','selected');
+        $("#events option").prop('selected', true);
         
         for (i = 0; i < clientTypes.length; i++) {
           $("#clients").append(new Option(clientTypes[i], clientTypes[i]));
         }
-        $("#clients option").attr('selected','selected');
+        $("#clients option").prop('selected', true);
         
         $("#nodeClear").prop('title', clearNodeText);
         $("#content").prop('title', clearNodeText);
@@ -151,8 +151,16 @@
         
         $("#nodeClear" ).click(function( event ) {
          $( "#content" ).val("");
-        });        
-                
+        });
+        
+        $("#sitesSelect" ).click(function( event ) {
+          $("#sites option").prop('selected', true);
+        });
+          
+        $("#peopleSelect" ).click(function( event ) {
+          $("#people option").prop('selected', true);
+        });
+                        
         $( "#upload-events" ).click(function( event ) {
            var confirmMess = "Would you like to create "+$("#numberOfValues").val()+ " events for "+$("#sites option:selected").size()+ " sites and "+$("#people option:selected").size()
                                       + " people. The events will be distributed uniformly from "+$("#startDate").val()+ " to "+$("#endDate").val()+" using "+$("#events option:selected").size()
