@@ -2,6 +2,9 @@
 An Alfresco Admin Console amp for creating Analytics demo data.
 
 To create the amp, type `mvn package`.
+
+### Date calculations
+Once the amps is installed, a helpful page for testing date calculations is [dates.html](http://localhost:8080/alfresco/dateutil/dates.html)
 ### License
 Copyright (C) 2015 Alfresco Software Limited
 
