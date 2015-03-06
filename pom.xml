@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.alfresco.analytics</groupId>
     <artifactId>analytics-tools</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>analytics-tools Repository AMP project</name>
     <packaging>amp</packaging>
     <description>Manages the lifecycle of the analytics-tools Repository AMP (Alfresco Module Package)</description>
