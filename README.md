@@ -1,6 +1,8 @@
 ## Analytics Tools
 An Alfresco Admin Console amp for creating Analytics demo data.
 
+To download the amp have a look at the [Releases](https://github.com/Alfresco/analytics-tools/releases).
+
 To create the amp, type `mvn package`.
 
 ### Date calculations
