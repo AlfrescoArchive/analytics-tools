@@ -5,6 +5,9 @@ To download the amp have a look at the [Releases](https://github.com/Alfresco/an
 
 To create the amp, type `mvn package`.
 
+### Prerequisites 
+**Alfresco Analytics runs on Alfresco 5.0 Enterprise and later.**
+
 ### Date calculations
 Once the amps is installed, a helpful page for testing date calculations is [dates.html](http://localhost:8080/alfresco/dateutil/dates.html)
 ### License
